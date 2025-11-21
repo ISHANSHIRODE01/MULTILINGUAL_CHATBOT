@@ -1,0 +1,27 @@
+Multilingual Chatbot Demo Script
+
+1. Introduction
+   - Welcome to the multilingual chatbot demo
+   - Features: ASR, TTS, Translation, Language Learning
+
+2. ASR Demo
+   - Upload audio file
+   - Show transcription results
+   - Demonstrate multiple language support
+
+3. Translation Demo
+   - Enter text in source language
+   - Select target language
+   - Show translation results
+
+4. TTS Demo
+   - Enter text
+   - Generate speech in target language
+   - Play audio output
+
+5. Learning Features
+   - Grammar feedback
+   - Pronunciation scoring
+   - Progress tracking
+
+6. Q&A Session

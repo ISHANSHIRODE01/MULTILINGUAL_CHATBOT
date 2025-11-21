@@ -1,0 +1,26 @@
+{
+  "api": {
+    "host": "0.0.0.0",
+    "port": 8000,
+    "debug": false
+  },
+  "models": {
+    "whisper_model": "base",
+    "vosk_model_path": "models/vosk-model",
+    "default_tts_engine": "gtts"
+  },
+  "languages": {
+    "supported": ["en", "es", "fr", "de", "it", "pt", "ru", "zh", "ja", "ko"],
+    "default_source": "auto",
+    "default_target": "en"
+  },
+  "audio": {
+    "max_file_size_mb": 10,
+    "supported_formats": ["wav", "mp3", "m4a", "ogg"],
+    "sample_rate": 16000
+  },
+  "feedback": {
+    "grammar_threshold": 0.8,
+    "pronunciation_threshold": 0.7
+  }
+}
