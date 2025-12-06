@@ -170,7 +170,7 @@ with st.sidebar:
         options=["de", "es", "fr"],
         format_func=lambda x: {"de": "German 🇩🇪", "es": "Spanish 🇪🇸", "fr": "French 🇫🇷"}[x],
         index=0
-    """)
+    )
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown('<div class="glass-container">', unsafe_allow_html=True)
