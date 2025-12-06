@@ -1,0 +1,63 @@
+2025-11-15 13:46:04 | INFO     | src.backend.asr:load_model:30 - Loaded OpenAI whisper model: base
+2025-11-15 13:46:09 | ERROR    | src.backend.translator:load_model_pair:30 - Failed to load translation model: 
+MarianTokenizer requires the SentencePiece library but it was not found in your environment. Check out the instructions on the
+installation page of its repo: https://github.com/google/sentencepiece#installation and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.
+
+2025-11-15 13:46:09 | ERROR    | src.backend.translator:translate:57 - Translation failed: Model loading failed: 
+MarianTokenizer requires the SentencePiece library but it was not found in your environment. Check out the instructions on the
+installation page of its repo: https://github.com/google/sentencepiece#installation and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.
+
+2025-11-15 13:46:14 | INFO     | src.backend.tts:_init_engine:26 - Set German voice: Microsoft David Desktop - English (United States)
+2025-11-15 13:46:14 | ERROR    | src.backend.tts:synthesize:48 - TTS synthesis failed: [Errno 2] No such file or directory: 'f:\\multilingual-chatbot\\temp\\tmpmnb7nzuq.mp3'
+2025-11-15 13:47:12 | INFO     | src.backend.asr:load_model:30 - Loaded OpenAI whisper model: base
+2025-11-15 13:47:16 | INFO     | src.backend.app:lifespan:23 - Starting Multilingual Chatbot API
+2025-11-15 13:49:17 | INFO     | src.backend.app:lifespan:28 - Shutting down API
+2025-11-15 13:54:48 | INFO     | src.backend.asr:load_model:30 - Loaded OpenAI whisper model: base
+2025-11-15 13:57:37 | INFO     | src.backend.asr:load_model:30 - Loaded OpenAI whisper model: base
+2025-11-15 13:58:29 | INFO     | src.backend.translator:load_model_pair:27 - Loaded translation model: Helsinki-NLP/opus-mt-en-de
+2025-11-15 13:58:29 | INFO     | src.backend.translator:translate:49 - Translation completed: en -> de
+2025-11-15 13:58:32 | INFO     | src.backend.tts:_init_engine:26 - Set German voice: Microsoft David Desktop - English (United States)
+2025-11-15 13:58:32 | INFO     | src.backend.tts:synthesize:45 - TTS synthesis completed: f:\multilingual-chatbot\temp\tmp9on6urzw.mp3
+2025-11-15 14:02:01 | INFO     | src.backend.translator:load_model_pair:27 - Loaded translation model: Helsinki-NLP/opus-mt-en-de
+2025-11-15 14:02:01 | INFO     | src.backend.translator:translate:49 - Translation completed: en -> de
+2025-11-15 14:02:04 | INFO     | src.backend.tts:_init_engine:26 - Set German voice: Microsoft David Desktop - English (United States)
+2025-11-15 14:02:04 | INFO     | src.backend.tts:synthesize:45 - TTS synthesis completed: F:\multilingual-chatbot\temp\tmpcccbp_lp.mp3
+2025-11-15 14:03:21 | INFO     | src.backend.asr:load_model:30 - Loaded OpenAI whisper model: base
+2025-11-15 14:03:21 | ERROR    | src.backend.asr:transcribe:68 - Transcription failed for test_audio.wav: [WinError 2] The system cannot find the file specified
+2025-11-15 14:03:25 | ERROR    | src.backend.asr:transcribe:68 - Transcription failed for test_audio.wav: [WinError 2] The system cannot find the file specified
+2025-11-15 14:03:29 | ERROR    | src.backend.asr:transcribe:68 - Transcription failed for test_audio.wav: [WinError 2] The system cannot find the file specified
+2025-11-15 14:03:37 | INFO     | src.backend.translator:load_model_pair:27 - Loaded translation model: Helsinki-NLP/opus-mt-en-de
+2025-11-15 14:03:37 | INFO     | src.backend.translator:translate:49 - Translation completed: en -> de
+2025-11-15 14:03:40 | INFO     | src.backend.tts:_init_engine:26 - Set German voice: Microsoft David Desktop - English (United States)
+2025-11-15 14:03:40 | INFO     | src.backend.tts:synthesize:45 - TTS synthesis completed: f:\multilingual-chatbot\temp\tmpiudorbqr.mp3
+2025-11-15 14:09:56 | INFO     | src.backend.asr:load_model:30 - Loaded OpenAI whisper model: base
+2025-11-15 14:09:56 | ERROR    | src.backend.asr:transcribe:68 - Transcription failed for f:\multilingual-chatbot\test_audio.wav: [WinError 2] The system cannot find the file specified
+2025-11-15 14:10:00 | ERROR    | src.backend.asr:transcribe:68 - Transcription failed for f:\multilingual-chatbot\test_audio.wav: [WinError 2] The system cannot find the file specified
+2025-11-15 14:10:04 | ERROR    | src.backend.asr:transcribe:68 - Transcription failed for f:\multilingual-chatbot\test_audio.wav: [WinError 2] The system cannot find the file specified
+2025-11-15 14:10:15 | INFO     | src.backend.translator:load_model_pair:27 - Loaded translation model: Helsinki-NLP/opus-mt-en-de
+2025-11-15 14:10:15 | INFO     | src.backend.translator:translate:49 - Translation completed: en -> de
+2025-11-15 14:10:20 | INFO     | src.backend.tts:_init_engine:26 - Set German voice: Microsoft David Desktop - English (United States)
+2025-11-15 14:10:20 | INFO     | src.backend.tts:synthesize:45 - TTS synthesis completed: f:\multilingual-chatbot\temp\tmp96w3apws.mp3
+2025-11-15 14:11:19 | INFO     | src.backend.asr:load_model:30 - Loaded OpenAI whisper model: base
+2025-11-15 14:11:19 | ERROR    | src.backend.asr:transcribe:70 - Transcription failed for f:/multilingual-chatbot/test_audio.wav: [WinError 2] The system cannot find the file specified
+2025-11-15 14:11:19 | INFO     | src.backend.asr:transcribe:73 - Returning mock result for test audio
+2025-11-15 14:11:34 | INFO     | src.backend.translator:load_model_pair:27 - Loaded translation model: Helsinki-NLP/opus-mt-en-de
+2025-11-15 14:11:35 | INFO     | src.backend.translator:translate:49 - Translation completed: en -> de
+2025-11-15 14:11:39 | INFO     | src.backend.tts:_init_engine:26 - Set German voice: Microsoft David Desktop - English (United States)
+2025-11-15 14:11:39 | INFO     | src.backend.tts:synthesize:45 - TTS synthesis completed: f:\multilingual-chatbot\temp\tmpggnc2ms9.mp3
+2025-11-15 14:12:17 | INFO     | src.backend.asr:load_model:30 - Loaded OpenAI whisper model: base
+2025-11-15 14:12:17 | ERROR    | src.backend.asr:transcribe:70 - Transcription failed for f:/multilingual-chatbot/test_audio.wav: [WinError 2] The system cannot find the file specified
+2025-11-15 14:12:17 | INFO     | src.backend.asr:transcribe:73 - Returning mock result for test audio
+2025-11-15 14:12:27 | INFO     | src.backend.translator:load_model_pair:27 - Loaded translation model: Helsinki-NLP/opus-mt-en-de
+2025-11-15 14:12:27 | INFO     | src.backend.translator:translate:49 - Translation completed: en -> de
+2025-11-15 14:12:32 | INFO     | src.backend.tts:_init_engine:26 - Set German voice: Microsoft David Desktop - English (United States)
+2025-11-15 14:12:32 | INFO     | src.backend.tts:synthesize:45 - TTS synthesis completed: f:\multilingual-chatbot\temp\tmphsmd2q_k.mp3
+2025-11-15 14:20:14 | INFO     | src.backend.asr:load_model:30 - Loaded OpenAI whisper model: base
+2025-11-15 14:20:14 | ERROR    | src.backend.asr:transcribe:70 - Transcription failed for f:/multilingual-chatbot/test_audio.wav: [WinError 2] The system cannot find the file specified
+2025-11-15 14:20:14 | INFO     | src.backend.asr:transcribe:73 - Returning mock result for test audio
+2025-11-15 14:20:24 | INFO     | src.backend.translator:load_model_pair:27 - Loaded translation model: Helsinki-NLP/opus-mt-en-de
+2025-11-15 14:20:24 | INFO     | src.backend.translator:translate:49 - Translation completed: en -> de
+2025-11-15 14:20:29 | INFO     | src.backend.tts:_init_engine:26 - Set German voice: Microsoft David Desktop - English (United States)
+2025-11-15 14:20:29 | INFO     | src.backend.tts:synthesize:45 - TTS synthesis completed: f:\multilingual-chatbot\temp\tmpxv69_ti3.mp3
