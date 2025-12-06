@@ -22,7 +22,7 @@ def explain_in_target_lang(topic: str, target_lang: str = "German", audience_lev
     if GEMINI_KEY:
         try:
             genai.configure(api_key=GEMINI_KEY)
-            model = genai.GenerativeModel('gemini-pro')
+            model = genai.GenerativeModel('gemini-1.5-flash')
             response = model.generate_content(prompt)
             return response.text.strip()
         except Exception as e:
@@ -44,7 +44,7 @@ def get_chat_response(user_text: str, context: str = "") -> str:
     if GEMINI_KEY:
         try:
             genai.configure(api_key=GEMINI_KEY)
-            model = genai.GenerativeModel('gemini-pro')
+            model = genai.GenerativeModel('gemini-1.5-flash')
             prompt = f"{context}\nUser: {user_text}\nAssistant:"
             response = model.generate_content(prompt)
             return response.text.strip()
