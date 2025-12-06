@@ -1,19 +1,15 @@
 import streamlit as st
-import requests
 import os
+import asyncio
 from pathlib import Path
+import uuid
 import time
 import base64
 
-# Configuration
-# Priority: Streamlit Secrets -> Env Var -> Docker Localhost
-if "API_BASE" in st.secrets:
-    API_BASE = st.secrets["API_BASE"]
-else:
-    API_BASE = os.getenv("API_BASE", "http://localhost:8080")
-MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
-SUPPORTED_FORMATS = ["wav", "mp3", "m4a", "ogg"]
+# Import backend modules directly
+from src.agents.orchestrator import handle_audio_interaction, handle_text_interaction
 
+# Page Config
 st.set_page_config(
     page_title="Multilingual Chatbot",
     page_icon="🤖",
@@ -149,33 +145,149 @@ def render_chat_message(role, text, lang=None):
         </div>
     """, unsafe_allow_html=True)
 
+# Initialize Session State
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+if "processing" not in st.session_state:
+    st.session_state.processing = False
+
 # Sidebar
 with st.sidebar:
     st.title("⚙️ Control Panel")
     
-    # API Status
-    try:
-        health_resp = requests.get(f"{API_BASE}/health", timeout=2)
-        if health_resp.status_code == 200:
-            st.markdown('<div><span class="status-dot status-online"></span>System Online</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div><span class="status-dot status-offline"></span>System Offline</div>', unsafe_allow_html=True)
-    except:
-        st.markdown('<div><span class="status-dot status-offline"></span>System Offline</div>', unsafe_allow_html=True)
+    # System Status (Internal)
+    st.markdown('<div><span class="status-dot status-online"></span>System Ready</div>', unsafe_allow_html=True)
         
     st.markdown("---")
     st.markdown("### 🌐 Settings")
     target_lang = st.selectbox(
         "Target Language",
-        options=["de", "es", "fr"],
-        format_func=lambda x: {"de": "German 🇩🇪", "es": "Spanish 🇪🇸", "fr": "French 🇫🇷"}[x],
+        options=["de", "es", "fr", "hi"],
+        format_func=lambda x: {"de": "German 🇩🇪", "es": "Spanish 🇪🇸", "fr": "French 🇫🇷", "hi": "Hindi 🇮🇳"}.get(x, x),
         index=0
     )
+    
+    st.markdown("---")
+    st.markdown("### 📊 Session Stats")
+    st.metric("Messages", len(st.session_state.messages))
+    
+    st.markdown("---")
+    col_a, col_b = st.columns(2)
+    with col_a:
+        if st.button("🗑️ Clear"):
+            st.session_state.messages = []
+            st.rerun()
+    with col_b:
+        # Export Chat
+        chat_text = "Conversation History\n\n"
+        for msg in st.session_state.messages:
+            role = msg["role"].upper()
+            content = msg["content"]
+            chat_text += f"[{role}]: {content}\n\n"
+            
+        st.download_button(
+            label="💾 Save",
+            data=chat_text,
+            file_name="chat_history.txt",
+            mime="text/plain"
+        )
+
+# Main Content
+col1, col2 = st.columns([2, 1])
+
+with col1:
+    st.markdown("# 🤖 Multilingual Assistant")
+    st.markdown("*Experience seamless voice conversations.*")
+    
+    # Chat Container
+    st.markdown('<div class="glass-container" style="min-height: 400px;">', unsafe_allow_html=True)
+    
+    if not st.session_state.messages:
+        st.info("👋 Welcome! Speak or type to start the conversation.")
+    
+    for msg in st.session_state.messages:
+        render_chat_message(msg["role"], msg["content"], msg.get("lang"))
+        if "audio" in msg and msg["audio"]:
+            st.audio(msg["audio"])
+        if "grammar" in msg and msg["grammar"]:
+            with st.expander("📝 Grammar Corrections"):
+                for m in msg["grammar"]:
+                    st.warning(f"• {m['message']}")
+                    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Input Area
+    st.markdown("### 🎙️ Voice Input")
+    
+    # Microphone Input
+    audio_buffer = st.audio_input("Record Audio")
+    
+    # File Uploader
+    uploaded = st.file_uploader("Or Upload Audio File", type=["wav", "mp3", "m4a", "ogg"])
+    
+    # Determine which input to use
+    input_audio = audio_buffer if audio_buffer else uploaded
+    
+    if input_audio:
+        # Check if this file was already processed to avoid re-processing on rerun
+        # Use a unique key based on file name or size/content if possible
+        file_key = f"{input_audio.name}_{input_audio.size}"
+        
+        if "last_processed" not in st.session_state or st.session_state.last_processed != file_key:
+            if st.button("🚀 Process Audio", type="primary"):
+                with st.spinner("🔄 Transcribing & Translating..."):
+                    try:
+                        # Save temp file
+                        temp_dir = Path("temp")
+                        temp_dir.mkdir(exist_ok=True)
+                        temp_path = temp_dir / f"{uuid.uuid4().hex}.wav"
+                        
+                        with open(temp_path, "wb") as f:
+                            f.write(input_audio.getbuffer())
+                        
+                        # Process directly using orchestrator
+                        result = asyncio.run(handle_audio_interaction(str(temp_path), target_lang=target_lang))
+                        
+                        # Cleanup
+                        if temp_path.exists():
+                            temp_path.unlink()
+
+                        # Add User Message
+                        st.session_state.messages.append({
+                            "role": "user",
+                            "content": result["user_text"],
+                            "lang": result["detected_lang"]
+                        })
+                        
+                        # Add Bot Message
+                        st.session_state.messages.append({
+                            "role": "assistant",
+                            "content": result["reply_text"],
+                            "lang": target_lang,
+                            "audio": result["reply_audio_path"],
+                            "grammar": result["grammar_matches"]
+                        })
+                        
+                        st.session_state.last_processed = file_key
+                        st.rerun()
+                        
+                    except Exception as e:
+                        st.error(f"Error: {str(e)}")
+
+with col2:
+    st.markdown('<div class="glass-container">', unsafe_allow_html=True)
+    st.markdown("### 🎯 Features")
+    st.markdown("""
+    - **Whisper ASR**: High-fidelity speech recognition
+    - **Gemini LLM**: Context-aware translations
+    - **Neural TTS**: Natural voice synthesis
+    - **Grammar Coach**: Real-time feedback
+    """)
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown('<div class="glass-container">', unsafe_allow_html=True)
     st.markdown("### 💡 Tips")
-    st.info("Try saying: 'Hello, how are you?' to see how it translates and responds in German!")
+    st.info("Try saying: 'Hello, how are you?' to see how it translates and responds!")
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Chat Input (Text)
@@ -187,35 +299,20 @@ if prompt := st.chat_input("Type a message..."):
         "lang": "auto"
     })
     
-    # Process
-    try:
-        payload = {"text": prompt, "target_lang": target_lang}
-        resp = requests.post(f"{API_BASE}/chat_text", json=payload, timeout=45)
-        
-        if resp.status_code == 200:
-            data = resp.json()
-            if data.get("success"):
-                res = data.get("data", {})
-                
-                # Add Bot Message
-                bot_msg = {
-                    "role": "assistant",
-                    "content": res.get("reply_text"),
-                    "lang": target_lang,
-                    "grammar": res.get("grammar_matches", [])
-                }
-                
-                # Handle Audio
-                audio_path = res.get("reply_audio_path")
-                if audio_path and Path(audio_path).exists():
-                    with open(audio_path, "rb") as f:
-                        bot_msg["audio"] = f.read()
-                
-                st.session_state.messages.append(bot_msg)
-                st.rerun()
-            else:
-                st.error(f"Error: {data.get('message')}")
-        else:
-            st.error("Server Error")
-    except Exception as e:
-        st.error(f"Connection Failed: {e}")
+    with st.spinner("Thinking..."):
+        try:
+            # Process directly using orchestrator
+            result = asyncio.run(handle_text_interaction(prompt, target_lang=target_lang))
+            
+            # Add Bot Message
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": result["reply_text"],
+                "lang": target_lang,
+                "audio": result["reply_audio_path"],
+                "grammar": result["grammar_matches"]
+            })
+        except Exception as e:
+            st.error(f"Error: {str(e)}")
+            
+    st.rerun()
