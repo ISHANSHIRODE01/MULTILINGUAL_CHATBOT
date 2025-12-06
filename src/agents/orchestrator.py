@@ -63,7 +63,14 @@ async def _process_text(user_text: str, detected_lang: str, target_lang: str) ->
         }
     except Exception as e:
         app_logger.error(f"Processing error: {e}")
-        raise e
+        # Return text-only response on error
+        return {
+            "user_text": user_text,
+            "detected_lang": detected_lang,
+            "reply_text": reply_text if reply_text else f"Error: {e}",
+            "reply_audio_path": None,
+            "grammar_matches": grammar_matches
+        }
 
 async def handle_audio_interaction(audio_path: str, user_lang_hint: str = None, target_lang: str = "de"):
     try:

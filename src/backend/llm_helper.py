@@ -13,7 +13,8 @@ def explain_in_target_lang(topic: str, target_lang: str = "German", audience_lev
         "de": "German",
         "es": "Spanish",
         "fr": "French",
-        "en": "English"
+        "en": "English",
+        "hi": "Hindi"
     }.get(target_lang, target_lang)
 
     prompt = f"Explain the following topic in simple {lang_name} for a {audience_level}: {topic}\nKeep sentences short and beginner-friendly."
