@@ -34,7 +34,7 @@ def load_model(model_size="small"):
         app_logger.error(f"Failed to load ASR model: {e}")
         raise ASRException(f"ASR model loading failed: {e}")
 
-_BACKEND, _MODEL = load_model(getattr(settings, 'whisper_model', 'small'))
+_BACKEND, _MODEL = load_model(getattr(settings, 'whisper_model', 'tiny'))
 
 def transcribe(audio_path: str, lang_hint: Optional[str] = None) -> Dict:
     """

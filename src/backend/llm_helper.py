@@ -50,7 +50,7 @@ def get_chat_response(user_text: str, context: str = "") -> str:
             return response.text.strip()
         except Exception as e:
             return f"Gemini API error: {e}"
-    return "I am listening."
+    return "I am listening. (Note: To get smart responses, please add your GEMINI_API_KEY to Streamlit Secrets.)"
 
 if __name__ == "__main__":
     print(explain_in_target_lang("How to prepare for IELTS speaking", target_lang="es"))
