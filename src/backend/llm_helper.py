@@ -22,9 +22,25 @@ def explain_in_target_lang(topic: str, target_lang: str = "German", audience_lev
     if GEMINI_KEY:
         try:
             genai.configure(api_key=GEMINI_KEY)
-            model = genai.GenerativeModel('gemini-1.5-flash')
-            response = model.generate_content(prompt)
-            return response.text.strip()
+            
+            models_to_try = [
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-1.0-pro',
+                'gemini-pro'
+            ]
+            
+            last_error = None
+            for model_name in models_to_try:
+                try:
+                    model = genai.GenerativeModel(model_name)
+                    response = model.generate_content(prompt)
+                    return response.text.strip()
+                except Exception as e:
+                    last_error = e
+                    continue
+            
+            return f"Gemini API error: All models failed. Last error: {last_error}"
         except Exception as e:
             return f"Gemini API error: {e}"
     else:
@@ -44,10 +60,33 @@ def get_chat_response(user_text: str, context: str = "") -> str:
     if GEMINI_KEY:
         try:
             genai.configure(api_key=GEMINI_KEY)
-            model = genai.GenerativeModel('gemini-1.5-flash')
-            prompt = f"{context}\nUser: {user_text}\nAssistant:"
-            response = model.generate_content(prompt)
-            return response.text.strip()
+            
+            # List of models to try in order of preference
+            models_to_try = [
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-1.0-pro',
+                'gemini-pro'
+            ]
+            
+            last_error = None
+            for model_name in models_to_try:
+                try:
+                    model = genai.GenerativeModel(model_name)
+                    # Simple test generation to verify model works
+                    if context:
+                        full_prompt = f"{context}\nUser: {user_text}\nAssistant:"
+                    else:
+                        full_prompt = user_text # For simple generation
+                        
+                    response = model.generate_content(full_prompt)
+                    return response.text.strip()
+                except Exception as e:
+                    last_error = e
+                    continue # Try next model
+            
+            return f"Gemini API error: All models failed. Last error: {last_error}"
+            
         except Exception as e:
             return f"Gemini API error: {e}"
     return "I am listening. (Note: To get smart responses, please add your GEMINI_API_KEY to Streamlit Secrets.)"
