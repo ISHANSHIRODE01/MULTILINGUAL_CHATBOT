@@ -9,7 +9,8 @@ VOICES = {
     "en": "en-US-AriaNeural",
     "de": "de-DE-KatjaNeural",
     "es": "es-ES-ElviraNeural",
-    "fr": "fr-FR-DeniseNeural"
+    "fr": "fr-FR-DeniseNeural",
+    "hi": "hi-IN-SwaraNeural"
 }
 
 async def synthesize(text: str, lang: str = "en", output_file: Optional[str] = None) -> str:
