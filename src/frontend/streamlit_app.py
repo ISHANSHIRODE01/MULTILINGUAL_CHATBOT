@@ -6,7 +6,8 @@ import time
 import base64
 
 # Configuration
-API_BASE = os.getenv("API_BASE", "http://localhost:8000")
+# In Docker, backend is on localhost:8080
+API_BASE = os.getenv("API_BASE", "http://localhost:8080")
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 SUPPORTED_FORMATS = ["wav", "mp3", "m4a", "ogg"]
 

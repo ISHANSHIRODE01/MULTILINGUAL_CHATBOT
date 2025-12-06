@@ -25,10 +25,16 @@ EXPOSE 8501
 EXPOSE 8000
 
 # Create a script to run both services
+# Render listens on the PORT env var (default 10000), but we can force it.
+# We will run Streamlit on port 80 (or $PORT) to be the main entry point.
+# Backend will run on localhost:8080.
+
+ENV PORT=8501
+
 RUN echo '#!/bin/bash\n\
-python -m src.backend.app & \n\
-streamlit run src/frontend/streamlit_app.py --server.port 8501 --server.address 0.0.0.0\n\
-wait' > /app/start.sh && chmod +x /app/start.sh
+    python -m src.backend.app --port 8080 & \n\
+    streamlit run src/frontend/streamlit_app.py --server.port $PORT --server.address 0.0.0.0\n\
+    wait' > /app/start.sh && chmod +x /app/start.sh
 
 # Run the start script
 CMD ["/app/start.sh"]
