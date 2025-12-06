@@ -1,5 +1,12 @@
 import streamlit as st
+import sys
 import os
+
+# Add the project root to the python path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
 import asyncio
 from pathlib import Path
 import uuid
